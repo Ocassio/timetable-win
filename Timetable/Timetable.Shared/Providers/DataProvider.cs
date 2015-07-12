@@ -1,6 +1,7 @@
 ﻿using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 using System.Threading.Tasks;
 using Timetable.Models;
@@ -18,9 +19,9 @@ namespace Timetable.Providers
 
         private const string TIMETABLE_URL = "http://www.tolgas.ru/services/raspisanie/";
 
-        public async static Task<List<Group>> GetGroups()
+        public async static Task<ObservableCollection<Group>> GetGroups()
         {
-            List<Group> groups = new List<Group>();
+            ObservableCollection<Group> groups = new ObservableCollection<Group>();
 
             HtmlDocument doc = await NetworkUtils.LoadDocument(TIMETABLE_URL);
             HtmlNodeCollection groupNodes = doc.GetElementbyId("vr").ChildNodes;
@@ -33,7 +34,7 @@ namespace Timetable.Providers
             return groups;
         }
 
-        public static async Task<List<Day>> GetTimetableByGroup(string group)
+        public static async Task<ObservableCollection<Day>> GetTimetableByGroup(string group)
         {
             Dictionary<string, string> parameters = new Dictionary<string, string>();
             parameters.Add("rel", REL_GROUP);
@@ -64,9 +65,9 @@ namespace Timetable.Providers
             return getDays(nodes);
         }
 
-        private static List<Day> getDays(List<HtmlNode> nodes)
+        private static ObservableCollection<Day> getDays(List<HtmlNode> nodes)
         {
-            List<Day> days = new List<Day>();
+            ObservableCollection<Day> days = new ObservableCollection<Day>();
 
             if (nodes.Count == 1)
             {

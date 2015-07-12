@@ -52,9 +52,6 @@ namespace Timetable
             this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
-
-            //loadGroups();
-            loadDays();
         }
 
         /// <summary>
@@ -73,6 +70,8 @@ namespace Timetable
             // TODO: Создание соответствующей модели данных для области проблемы, чтобы заменить пример данных
             var sampleDataGroup = await SampleDataSource.GetGroupAsync("Group-4");
             this.DefaultViewModel["Section3Items"] = sampleDataGroup;
+
+            this.DefaultViewModel["Days"] = await DataProvider.GetTimetableByGroup("557");
         }
 
         /// <summary>
@@ -123,28 +122,28 @@ namespace Timetable
 
         #endregion
 
-        private async Task loadGroups()
-        {
-            List<Group> groups = await DataProvider.GetGroups();
-            StringBuilder builder = new StringBuilder();
-            foreach (Group group in groups)
-            {
-                builder.Append(group.ToString());
-            }
+        //private async Task loadGroups()
+        //{
+        //    List<Group> groups = await DataProvider.GetGroups();
+        //    StringBuilder builder = new StringBuilder();
+        //    foreach (Group group in groups)
+        //    {
+        //        builder.Append(group.ToString());
+        //    }
 
-            pageTitle.Text = builder.ToString();
-        }
+        //    pageTitle.Text = builder.ToString();
+        //}
 
-        private async Task loadDays()
-        {
-            List<Day> days = await DataProvider.GetTimetableByGroup("557");
-            StringBuilder builder = new StringBuilder();
-            foreach (Day day in days)
-            {
-                builder.Append(day.ToString());
-            }
+        //private async Task loadDays()
+        //{
+        //    List<Day> days = await DataProvider.GetTimetableByGroup("557");
+        //    StringBuilder builder = new StringBuilder();
+        //    foreach (Day day in days)
+        //    {
+        //        builder.Append(day.ToString());
+        //    }
 
-            pageTitle.Text = builder.ToString();
-        }
+        //    pageTitle.Text = builder.ToString();
+        //}
     }
 }
