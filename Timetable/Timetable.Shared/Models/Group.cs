@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Parser.Models
+namespace Timetable.Models
 {
     public class Group
     {
