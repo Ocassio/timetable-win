@@ -49,9 +49,15 @@ namespace Timetable.Providers
 
             foreach (HtmlNode node in tableNodes)
             {
-                if (node.Attributes["class"].Value.Contains("hours"))
+                if (node.Name == "tr")
                 {
-                    nodes.Add(node);
+                    foreach (HtmlNode childNode in node.ChildNodes)
+                    {
+                        if (childNode.Attributes["class"] != null && childNode.Attributes["class"].Value.Contains("hours"))
+                        {
+                            nodes.Add(childNode);
+                        }
+                    }
                 }
             }
 

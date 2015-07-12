@@ -35,7 +35,7 @@ namespace Timetable.Utils
 
             HtmlDocument doc = new HtmlDocument();
             WebResponse response = await request.GetResponseAsync();
-            doc.Load(response.GetResponseStream());
+            doc.Load(response.GetResponseStream(), Encoding.GetEncoding("windows-1251"));
 
             return doc;
         }

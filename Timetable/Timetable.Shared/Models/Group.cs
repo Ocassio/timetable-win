@@ -21,9 +21,7 @@ namespace Timetable.Models
 
         public override string ToString()
         {
-            //byte[] byteName = Encoding.GetEncoding(1251).GetBytes(Name);
-            //byteName = Encoding.Convert(Encoding.GetEncoding(1251), Encoding.UTF8, byteName);
-            return Id + " - " + Name;//Encoding.UTF8.GetString(byteName);
+            return Id + " - " + Name;
         }
     }
 }

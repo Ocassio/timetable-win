@@ -14,6 +14,10 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Timetable.Data;
 using Timetable.Common;
+using Timetable.Providers;
+using System.Threading.Tasks;
+using Timetable.Models;
+using System.Text;
 
 // Документацию по шаблону проекта "Универсальное приложение с Hub" см. по адресу http://go.microsoft.com/fwlink/?LinkID=391955
 
@@ -48,6 +52,9 @@ namespace Timetable
             this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
+
+            //loadGroups();
+            loadDays();
         }
 
         /// <summary>
@@ -115,5 +122,29 @@ namespace Timetable
         }
 
         #endregion
+
+        private async Task loadGroups()
+        {
+            List<Group> groups = await DataProvider.GetGroups();
+            StringBuilder builder = new StringBuilder();
+            foreach (Group group in groups)
+            {
+                builder.Append(group.ToString());
+            }
+
+            pageTitle.Text = builder.ToString();
+        }
+
+        private async Task loadDays()
+        {
+            List<Day> days = await DataProvider.GetTimetableByGroup("557");
+            StringBuilder builder = new StringBuilder();
+            foreach (Day day in days)
+            {
+                builder.Append(day.ToString());
+            }
+
+            pageTitle.Text = builder.ToString();
+        }
     }
 }
