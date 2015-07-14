@@ -45,14 +45,16 @@ namespace Timetable.Models
 
         public override string ToString()
         {
-            string result = Date + "\n";
+//            string result = Date + "\n";
+//
+//            foreach (Lesson lesson in Lessons)
+//            {
+//                result += lesson.ToString() + "\n";
+//            }
+//
+//            return result;
 
-            foreach (Lesson lesson in Lessons)
-            {
-                result += lesson.ToString() + "\n";
-            }
-
-            return result;
+            return Date;
         }
     }
 }

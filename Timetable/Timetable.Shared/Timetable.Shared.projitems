@@ -22,6 +22,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Providers\DataProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\DateUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\NetworkUtils.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\ItemsHub.cs" />
     <Content Include="$(MSBuildThisFileDirectory)DataModel\SampleData.json" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\LightGray.png" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\MediumGray.png" />
