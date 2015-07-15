@@ -14,21 +14,61 @@
     <Page.Resources>
         
         <DataTemplate x:Key="LessonTemplate">
-            <Border Background="{Binding Color}" Height="Auto" Margin="0, 20, 0, 0">
-                <StackPanel Margin="10,10,10,10">
-                    <TextBlock Text="{Binding Name}" Style="{StaticResource TitleTextBlockStyle}" TextWrapping="Wrap"/>
-                    <TextBlock Text="{Binding Teacher}" Style="{StaticResource BodyTextBlockStyle}" MaxHeight="60" />
+            <StackPanel Name="LessonContainer"  Orientation="Horizontal" Margin="0, 20, 0, 0" HorizontalAlignment="Stretch">
+                <Border Background="{Binding Color}" Width="10" />
+                <TextBlock Text="{Binding Number}" 
+                           TextAlignment="Center" 
+                           VerticalAlignment="Center"
+                           Style="{StaticResource HeaderTextBlockStyle}"
+                           FontSize="50"
+                           Margin="10, 0, 10, 0"
+                           Width="40"/>
+                <StackPanel Margin="10, 0, 10, 10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding Room}"
+                                   Style="{StaticResource BodyTextBlockStyle}"
+                                   Grid.Column="0"/>
+                        <TextBlock Text="{Binding Type}"
+                                   Style="{StaticResource BodyTextBlockStyle}"
+                                   TextAlignment="Right"
+                                   Grid.Column="2"/>
+                    </Grid>
+                    <TextBlock Text="{Binding Name}"
+                               Style="{StaticResource TitleTextBlockStyle}"
+                               TextWrapping="Wrap" />
+                    <TextBlock Text="{Binding Teacher}"
+                               Style="{StaticResource BodyTextBlockStyle}"
+                               TextWrapping="Wrap"
+                               MaxHeight="60" />
                 </StackPanel>
-            </Border>
+            </StackPanel>
         </DataTemplate>
         
         <DataTemplate x:Key="DayTemplate">
             <StackPanel Orientation="Vertical">
-                <ItemsControl>
+                <ItemsControl HorizontalAlignment="Stretch">
                     <ItemsControl ItemsSource="{Binding Lessons}"
-                                  ItemTemplate="{StaticResource LessonTemplate}" />
+                                  ItemTemplate="{StaticResource LessonTemplate}"
+                                  HorizontalAlignment="Stretch"/>
                 </ItemsControl>
             </StackPanel>
+<!--            <Grid>-->
+<!--                <Grid.ColumnDefinitions>-->
+<!--                    <ColumnDefinition Width="*"></ColumnDefinition>-->
+<!--                </Grid.ColumnDefinitions>-->
+<!--                <GridView ItemsSource="{Binding Lessons}"-->
+<!--                          ItemTemplate="{StaticResource LessonTemplate}"-->
+<!--                          SelectionMode="None"-->
+<!--                          IsItemClickEnabled="False"-->
+<!--                          HorizontalContentAlignment="Left">-->
+<!--                    -->
+<!--                </GridView>-->
+<!--            </Grid>-->
         </DataTemplate>
         
     </Page.Resources>
