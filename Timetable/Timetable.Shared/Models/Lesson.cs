@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Media;
 
 namespace Timetable.Models
 {
     public class Lesson
     {
-        public String Number { get; set; }
-        public String Room { get; set; }
-        public String Name { get; set; }
-        public String Teacher { get; set; }
-        public String Type { get; set; }
+        public string Number { get; set; }
+        public string Room { get; set; }
+        public string Name { get; set; }
+        public string Teacher { get; set; }
+        public string Type { get; set; }
+        public Brush Color { get; set; }
 
         public Lesson() { }
 
@@ -36,7 +38,7 @@ namespace Timetable.Models
 
         public override string ToString()
         {
-            return String.Format("{0}, {1}, {2}, {3}, {4}", Number, Name, Room, Teacher, Type);
+            return $"{Number}, {Name}, {Room}, {Teacher}, {Type}";
         }
     }
 }

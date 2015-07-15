@@ -20,6 +20,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\Group.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Lesson.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Providers\DataProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\ColorsHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\DateUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\NetworkUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\ItemsHub.cs" />

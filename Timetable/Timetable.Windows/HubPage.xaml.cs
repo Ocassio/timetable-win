@@ -18,6 +18,8 @@ using Timetable.Providers;
 using System.Threading.Tasks;
 using Timetable.Models;
 using System.Text;
+using Windows.UI;
+using Timetable.Utils;
 
 // Документацию по шаблону проекта "Универсальное приложение с Hub" см. по адресу http://go.microsoft.com/fwlink/?LinkID=391955
 
@@ -71,7 +73,9 @@ namespace Timetable
             var sampleDataGroup = await SampleDataSource.GetGroupAsync("Group-4");
             this.DefaultViewModel["Section3Items"] = sampleDataGroup;
 
-            this.DefaultViewModel["Days"] = await DataProvider.GetTimetableByGroup("557");
+            var days = await DataProvider.GetTimetableByGroup("557");
+            ColorsHelper.SetRandomColors(days);
+            this.DefaultViewModel["Days"] = days;
         }
 
         /// <summary>
