@@ -16,6 +16,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\SampleDataSource.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Encodings\Win1251Encoding.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Day.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Group.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Lesson.cs" />

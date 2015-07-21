@@ -6,11 +6,14 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Timetable.Encodings;
 
 namespace Timetable.Utils
 {
     public class NetworkUtils
     {
+        private static readonly Encoding PAGE_ENCODING = new Win1251Encoding();
+
         private NetworkUtils() { }
 
         public static async Task<HtmlDocument> LoadDocument(string url)
@@ -34,8 +37,9 @@ namespace Timetable.Utils
             }
 
             HtmlDocument doc = new HtmlDocument();
+            doc.OptionReadEncoding = false;
             WebResponse response = await request.GetResponseAsync();
-            doc.Load(response.GetResponseStream(), Encoding.GetEncoding("windows-1251"));
+            doc.Load(response.GetResponseStream(), PAGE_ENCODING);
 
             return doc;
         }
@@ -59,7 +63,7 @@ namespace Timetable.Utils
 
         private static byte[] getParamsBytes(Dictionary<string, string> parameters)
         {
-            return Encoding.GetEncoding("windows-1251").GetBytes(getParamsString(parameters));
+            return PAGE_ENCODING.GetBytes(getParamsString(parameters));
         }
     }
 }

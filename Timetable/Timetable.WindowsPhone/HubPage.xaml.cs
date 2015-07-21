@@ -1,25 +1,25 @@
-﻿using Timetable.Common;
-using Timetable.Data;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.ApplicationModel.Resources;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
-using Windows.Graphics.Display;
-using Windows.UI.Core;
-using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
+using Timetable.Data;
+using Timetable.Common;
+using Timetable.Providers;
+using System.Threading.Tasks;
+using Timetable.Models;
+using System.Text;
+using Windows.UI;
+using Timetable.Utils;
 
 // Документацию по шаблону проекта "Универсальное приложение с Hub" см. по адресу http://go.microsoft.com/fwlink/?LinkID=391955
 
@@ -30,26 +30,11 @@ namespace Timetable
     /// </summary>
     public sealed partial class HubPage : Page
     {
-        private readonly NavigationHelper navigationHelper;
-        private readonly ObservableDictionary defaultViewModel = new ObservableDictionary();
-        private readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView("Resources");
-
-        public HubPage()
-        {
-            this.InitializeComponent();
-
-            // Элемент управления Hub ("Главный раздел") поддерживается только в книжной ориентации
-            DisplayInformation.AutoRotationPreferences = DisplayOrientations.Portrait;
-
-            this.NavigationCacheMode = NavigationCacheMode.Required;
-
-            this.navigationHelper = new NavigationHelper(this);
-            this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
-            this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
-        }
+        private NavigationHelper navigationHelper;
+        private ObservableDictionary defaultViewModel = new ObservableDictionary();
 
         /// <summary>
-        /// Получает объект <see cref="NavigationHelper"/>, связанный с данным объектом <see cref="Page"/>.
+        /// Получает NavigationHelper, используемый для облегчения навигации и управления жизненным циклом процессов.
         /// </summary>
         public NavigationHelper NavigationHelper
         {
@@ -57,12 +42,18 @@ namespace Timetable
         }
 
         /// <summary>
-        /// Получает модель представлений для данного объекта <see cref="Page"/>.
-        /// Эту настройку можно изменить на модель строго типизированных представлений.
+        /// Получает DefaultViewModel. Эту модель можно изменить на модель строго типизированных представлений.
         /// </summary>
         public ObservableDictionary DefaultViewModel
         {
             get { return this.defaultViewModel; }
+        }
+
+        public HubPage()
+        {
+            this.InitializeComponent();
+            this.navigationHelper = new NavigationHelper(this);
+            this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
         }
 
         /// <summary>
@@ -79,65 +70,50 @@ namespace Timetable
         private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
             // TODO: Создание соответствующей модели данных для области проблемы, чтобы заменить пример данных
-            var sampleDataGroups = await SampleDataSource.GetGroupsAsync();
-            this.DefaultViewModel["Groups"] = sampleDataGroups;
+            var sampleDataGroup = await SampleDataSource.GetGroupAsync("Group-4");
+            this.DefaultViewModel["Section3Items"] = sampleDataGroup;
+
+            var days = await DataProvider.GetTimetableByGroup("557");
+            ColorsHelper.SetRandomColors(days);
+            this.DefaultViewModel["Days"] = days;
         }
 
         /// <summary>
-        /// Сохраняет состояние, связанное с данной страницей, в случае приостановки приложения или
-        /// удаления страницы из кэша навигации.  Значения должны соответствовать требованиям сериализации
-        /// <see cref="SuspensionManager.SessionState"/>.
+        /// Вызывается при щелчке заголовка HubSection.
         /// </summary>
-        /// <param name="sender">Источник события; как правило, <see cref="NavigationHelper"/></param>
-        /// <param name="e">Данные события, которые предоставляют пустой словарь для заполнения
-        /// сериализуемым состоянием.</param>
-        private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
+        /// <param name="sender">Главная страница, которая содержит элемент HubSection, заголовок которого щелкнул пользователь.</param>
+        /// <param name="e">Данные события, описывающие, каким образом был инициирован щелчок.</param>
+        void Hub_SectionHeaderClick(object sender, HubSectionHeaderClickEventArgs e)
         {
-            // TODO: Сохраните здесь уникальное состояние страницы.
+            HubSection section = e.Section;
+            var group = section.DataContext;
+            this.Frame.Navigate(typeof(SectionPage), ((SampleDataGroup)group).UniqueId);
         }
 
         /// <summary>
-        /// Показывает сведения о группе, которую щелкнул пользователь, в объекте <see cref="SectionPage"/>.
+        /// Вызывается при нажатии элемента внутри раздела.
         /// </summary>
-        /// <param name="sender">Источник события щелчка.</param>
-        /// <param name="e">Сведения о событии щелчка.</param>
-        private void GroupSection_ItemClick(object sender, ItemClickEventArgs e)
+        /// <param name="sender">Представление сетки или списка
+        /// в котором отображается нажатый элемент.</param>
+        /// <param name="e">Данные о событии, описывающие нажатый элемент.</param>
+        void ItemView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            var groupId = ((SampleDataGroup)e.ClickedItem).UniqueId;
-            if (!Frame.Navigate(typeof(SectionPage), groupId))
-            {
-                throw new Exception(this.resourceLoader.GetString("NavigationFailedExceptionMessage"));
-            }
-        }
-
-        /// <summary>
-        /// Показывает сведения об элементе, который щелкнул пользователь, в объекте <see cref="ItemPage"/>
-        /// </summary>
-        /// <param name="sender">Источник события щелчка.</param>
-        /// <param name="e">Значения по умолчанию для события щелчка.</param>
-        private void ItemView_ItemClick(object sender, ItemClickEventArgs e)
-        {
+            // Переход к соответствующей странице назначения и настройка новой страницы
+            // путем передачи необходимой информации в виде параметра навигации
             var itemId = ((SampleDataItem)e.ClickedItem).UniqueId;
-            if (!Frame.Navigate(typeof(ItemPage), itemId))
-            {
-                throw new Exception(this.resourceLoader.GetString("NavigationFailedExceptionMessage"));
-            }
+            this.Frame.Navigate(typeof(ItemPage), itemId);
         }
-
         #region Регистрация NavigationHelper
 
         /// <summary>
         /// Методы, предоставленные в этом разделе, используются исключительно для того, чтобы
         /// NavigationHelper для отклика на методы навигации страницы.
-        /// <para>
-        /// Логика страницы должна быть размещена в обработчиках событий для
-        /// <see cref="NavigationHelper.LoadState"/>
-        /// и <see cref="NavigationHelper.SaveState"/>.
-        /// Параметр навигации доступен в методе LoadState
+        /// Логика страницы должна быть размещена в обработчиках событий для 
+        /// <see cref="Common.NavigationHelper.LoadState"/>
+        /// и <see cref="Common.NavigationHelper.SaveState"/>.
+        /// Параметр навигации доступен в методе LoadState 
         /// в дополнение к состоянию страницы, сохраненному в ходе предыдущего сеанса.
-        /// </para>
         /// </summary>
-        /// <param name="e">Данные события, описывающие, каким образом была достигнута эта страница.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
@@ -149,5 +125,29 @@ namespace Timetable
         }
 
         #endregion
+
+        //private async Task loadGroups()
+        //{
+        //    List<Group> groups = await DataProvider.GetGroups();
+        //    StringBuilder builder = new StringBuilder();
+        //    foreach (Group group in groups)
+        //    {
+        //        builder.Append(group.ToString());
+        //    }
+
+        //    pageTitle.Text = builder.ToString();
+        //}
+
+        //private async Task loadDays()
+        //{
+        //    List<Day> days = await DataProvider.GetTimetableByGroup("557");
+        //    StringBuilder builder = new StringBuilder();
+        //    foreach (Day day in days)
+        //    {
+        //        builder.Append(day.ToString());
+        //    }
+
+        //    pageTitle.Text = builder.ToString();
+        //}
     }
 }
