@@ -10,6 +10,15 @@ namespace Timetable.Views
 {
     class ItemsHub : Hub
     {
+        public DataTemplate SectonHeaderTemplate
+        {
+            get { return (DataTemplate)GetValue(SectionHeaderTemplateProperty); }
+            set { SetValue(SectionHeaderTemplateProperty, value); }
+        }
+
+        public static readonly DependencyProperty SectionHeaderTemplateProperty =
+            DependencyProperty.Register("SectionHeaderTemplate", typeof(DataTemplate), typeof(ItemsHub), new PropertyMetadata(null, SectionHeaderTemplateChanged));
+
         public DataTemplate ItemTemplate
         {
             get { return (DataTemplate)GetValue(ItemTemplateProperty); }
@@ -45,6 +54,23 @@ namespace Timetable.Views
             }
         }
 
+        private static void SectionHeaderTemplateChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ItemsHub hub = d as ItemsHub;
+            if (hub != null)
+            {
+                DataTemplate template = e.NewValue as DataTemplate;
+                if (template != null)
+                {
+                    // Apply template
+                    foreach (var section in hub.Sections)
+                    {
+                        section.HeaderTemplate = template;
+                    }
+                }
+            }
+        }
+
         private static void ItemsSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             ItemsHub hub = d as ItemsHub;
@@ -60,6 +86,7 @@ namespace Timetable.Views
                     Header = item
                 };
                 DataTemplate template = hub.ItemTemplate;
+                section.HeaderTemplate = hub.SectonHeaderTemplate;
                 section.ContentTemplate = template;
                 hub.Sections.Add(section);
             }

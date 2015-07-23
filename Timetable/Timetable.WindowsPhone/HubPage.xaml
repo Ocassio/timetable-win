@@ -17,8 +17,11 @@
             <TextBlock Margin="0, 15, 0, 0" Text="{Binding}"/>
         </DataTemplate>
 
-        <DataTemplate x:Key="HubSectionHeaderTemplate">
-            <TextBlock Margin="0,0,0,-9.5" Text="{Binding}"/>
+        <DataTemplate x:Key="SectionHeaderTemplate">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Margin="0, 15, 0, 0" Text="{Binding Date}"/>
+                <TextBlock Margin="0,0,0,-9.5" Text="{Binding DayOfWeek}"/>
+            </StackPanel>
         </DataTemplate>
 
         <DataTemplate x:Key="LessonTemplate">
@@ -96,6 +99,7 @@
         </Grid.ChildrenTransitions>
         <lv:ItemsHub Header="Расписание"
                      HeaderTemplate="{StaticResource HeaderTemplate}"
+                     SectonHeaderTemplate="{StaticResource SectionHeaderTemplate}"
                      ItemTemplate="{StaticResource DayTemplate}"
                      ItemsSource="{Binding Days}">
         </lv:ItemsHub>

@@ -3,14 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Timetable.Utils;
 
 namespace Timetable.Models
 {
     public class Day
     {
         private List<Lesson> lessons;
+        private string date;
 
-        public string Date { get; set; }
+        public string Date
+        {
+            get { return date; }
+
+            set
+            {
+                date = value;
+                DayOfWeek = DateUtils.GetDayOfTheWeek(date);
+            }
+        }
+
+        public string DayOfWeek { get; set; }
 
         public List<Lesson> Lessons
         {
@@ -35,11 +48,13 @@ namespace Timetable.Models
         public Day(string date)
         {
             Date = date;
+            DayOfWeek = DateUtils.GetDayOfTheWeek(date);
         }
 
         public Day(string date, List<Lesson> lessons)
         {
             Date = date;
+            DayOfWeek = DateUtils.GetDayOfTheWeek(date);
             Lessons = lessons;
         }
 
