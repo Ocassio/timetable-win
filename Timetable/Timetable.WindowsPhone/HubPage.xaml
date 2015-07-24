@@ -18,9 +18,13 @@
         </DataTemplate>
 
         <DataTemplate x:Key="SectionHeaderTemplate">
-            <StackPanel Orientation="Vertical">
-                <TextBlock Margin="0, 15, 0, 0" Text="{Binding Date}"/>
-                <TextBlock Margin="0,0,0,-9.5" Text="{Binding DayOfWeek}"/>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Date}"
+                           Style="{StaticResource SubheaderTextBlockStyle}"/>
+                <TextBlock Margin="20, 0"
+                           Text="{Binding DayOfWeek}"
+                           Style="{StaticResource GroupHeaderTextBlockStyle}"
+                           VerticalAlignment="Center"/>
             </StackPanel>
         </DataTemplate>
 
@@ -31,15 +35,11 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-
-                
                 
                 <TextBlock Text="{Binding Number}" 
                         TextAlignment="Center" 
                         VerticalAlignment="Center"
-                        
                         Style="{StaticResource HeaderTextBlockStyle}"
-                        Foreground="White"
                         FontSize="50"
                         Width="50" />
 
