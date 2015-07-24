@@ -91,10 +91,53 @@
                 <EntranceThemeTransition/>
             </TransitionCollection>
         </Grid.ChildrenTransitions>
-        <lv:ItemsHub Header="Расписание"
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        
+
+        <ProgressRing Name="ProgressRing"
+                      IsActive="True"
+                      Width="90"
+                      Height="90"
+                      Grid.Row="1"/>
+
+        <lv:ItemsHub Margin="0, -120, 0, 0"
+                     Grid.Row="1"
                      SectonHeaderTemplate="{StaticResource SectionHeaderTemplate}"
                      ItemTemplate="{StaticResource DayTemplate}"
                      ItemsSource="{Binding Days}">
         </lv:ItemsHub>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Расписание"
+                       Style="{StaticResource HeaderTextBlockStyle}"
+                       Margin="45, 50"/>
+
+            <Button Name="RefreshButton"
+                    Grid.Column="2"
+                    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+                    Margin="0, 0, 20, 0"
+                    VerticalContentAlignment="Center"
+                    IsEnabled="True"
+                    Click="RefreshButton_OnClick"
+                    Width="60"
+                    Height="60">
+                <Image Source="Assets/refresh-icon.png"
+                       Width="30"
+                       Height="30"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"/>
+            </Button>
+
+        </Grid>
     </Grid>
 </Page>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -76,6 +77,8 @@ namespace Timetable
             var days = await DataProvider.GetTimetableByGroup("557");
             ColorsHelper.SetRandomColors(days);
             this.DefaultViewModel["Days"] = days;
+
+            ProgressRing.IsActive = false;
         }
 
         /// <summary>
@@ -126,28 +129,15 @@ namespace Timetable
 
         #endregion
 
-        //private async Task loadGroups()
-        //{
-        //    List<Group> groups = await DataProvider.GetGroups();
-        //    StringBuilder builder = new StringBuilder();
-        //    foreach (Group group in groups)
-        //    {
-        //        builder.Append(group.ToString());
-        //    }
+        private async void RefreshButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            ProgressRing.IsActive = true;
 
-        //    pageTitle.Text = builder.ToString();
-        //}
+            var days = await DataProvider.GetTimetableByGroup("557");
+            ColorsHelper.SetRandomColors(days);
+            DefaultViewModel["Days"] = days;
 
-        //private async Task loadDays()
-        //{
-        //    List<Day> days = await DataProvider.GetTimetableByGroup("557");
-        //    StringBuilder builder = new StringBuilder();
-        //    foreach (Day day in days)
-        //    {
-        //        builder.Append(day.ToString());
-        //    }
-
-        //    pageTitle.Text = builder.ToString();
-        //}
+            ProgressRing.IsActive = false;
+        }
     }
 }

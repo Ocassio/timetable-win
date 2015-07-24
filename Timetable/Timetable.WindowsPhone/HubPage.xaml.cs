@@ -76,6 +76,8 @@ namespace Timetable
             var days = await DataProvider.GetTimetableByGroup("557");
             ColorsHelper.SetRandomColors(days);
             this.DefaultViewModel["Days"] = days;
+
+            ProgressRing.IsActive = false;
         }
 
         /// <summary>

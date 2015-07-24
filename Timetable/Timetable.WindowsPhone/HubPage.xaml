@@ -97,6 +97,12 @@
                 <EntranceThemeTransition/>
             </TransitionCollection>
         </Grid.ChildrenTransitions>
+
+        <ProgressRing Name="ProgressRing"
+                      IsActive="True"
+                      Width="90"
+                      Height="90"/>
+
         <lv:ItemsHub Header="Расписание"
                      HeaderTemplate="{StaticResource HeaderTemplate}"
                      SectonHeaderTemplate="{StaticResource SectionHeaderTemplate}"
