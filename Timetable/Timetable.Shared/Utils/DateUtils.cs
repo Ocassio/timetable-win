@@ -25,7 +25,7 @@ namespace Timetable.Utils
             {
                 DateTime.ParseExact(value, DATE_FORMAT, CultureInfo.InvariantCulture);
             }
-            catch (FormatException e)
+            catch (FormatException)
             {
                 return false;
             }

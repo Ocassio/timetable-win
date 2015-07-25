@@ -74,7 +74,12 @@ namespace Timetable
             var sampleDataGroup = await SampleDataSource.GetGroupAsync("Group-4");
             this.DefaultViewModel["Section3Items"] = sampleDataGroup;
 
-            var days = await DataProvider.GetTimetableByGroup("557");
+            
+            var days = await CacheProvider.LoadTimetable();
+            ColorsHelper.SetRandomColors(days);
+            this.DefaultViewModel["Days"] = days;
+
+            days = await DataProvider.GetTimetableByGroup("557");
             ColorsHelper.SetRandomColors(days);
             this.DefaultViewModel["Days"] = days;
 
