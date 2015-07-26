@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Timetable.Models;
@@ -26,7 +27,7 @@ namespace Timetable.Providers
             HtmlDocument doc = await NetworkUtils.LoadDocument(TIMETABLE_URL);
             HtmlNodeCollection groupNodes = doc.GetElementbyId("vr").ChildNodes;
 
-            foreach (HtmlNode node in groupNodes)
+            foreach (HtmlNode node in groupNodes.Where(node => node.Name == "option"))
             {
                 groups.Add(new Group(node.GetAttributeValue(ATTR_VALUE, ""), node.InnerText));
             }

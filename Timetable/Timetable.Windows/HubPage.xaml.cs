@@ -83,34 +83,11 @@ namespace Timetable
             ColorsHelper.SetRandomColors(days);
             this.DefaultViewModel["Days"] = days;
 
-            ProgressRing.IsActive = false;
+            this.DefaultViewModel["Groups"] = await DataProvider.GetGroups();
+
+            ProgressBar.IsIndeterminate = false;
         }
 
-        /// <summary>
-        /// Вызывается при щелчке заголовка HubSection.
-        /// </summary>
-        /// <param name="sender">Главная страница, которая содержит элемент HubSection, заголовок которого щелкнул пользователь.</param>
-        /// <param name="e">Данные события, описывающие, каким образом был инициирован щелчок.</param>
-        void Hub_SectionHeaderClick(object sender, HubSectionHeaderClickEventArgs e)
-        {
-            HubSection section = e.Section;
-            var group = section.DataContext;
-            this.Frame.Navigate(typeof(SectionPage), ((SampleDataGroup)group).UniqueId);
-        }
-
-        /// <summary>
-        /// Вызывается при нажатии элемента внутри раздела.
-        /// </summary>
-        /// <param name="sender">Представление сетки или списка
-        /// в котором отображается нажатый элемент.</param>
-        /// <param name="e">Данные о событии, описывающие нажатый элемент.</param>
-        void ItemView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            // Переход к соответствующей странице назначения и настройка новой страницы
-            // путем передачи необходимой информации в виде параметра навигации
-            var itemId = ((SampleDataItem)e.ClickedItem).UniqueId;
-            this.Frame.Navigate(typeof(ItemPage), itemId);
-        }
         #region Регистрация NavigationHelper
 
         /// <summary>
@@ -136,13 +113,13 @@ namespace Timetable
 
         private async void RefreshButton_OnClick(object sender, RoutedEventArgs e)
         {
-            ProgressRing.IsActive = true;
+            ProgressBar.IsIndeterminate = true;
 
             var days = await DataProvider.GetTimetableByGroup("557");
             ColorsHelper.SetRandomColors(days);
             DefaultViewModel["Days"] = days;
 
-            ProgressRing.IsActive = false;
+            ProgressBar.IsIndeterminate = false;
         }
     }
 }
