@@ -23,5 +23,12 @@ namespace Timetable.Models
         {
             return Name;
         }
+
+        public override bool Equals(object obj)
+        {
+            if (typeof (Group) != obj.GetType()) return false;
+            var other = (Group) obj;
+            return Id == other.Id;
+        }
     }
 }

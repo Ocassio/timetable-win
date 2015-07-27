@@ -31,7 +31,7 @@ namespace Timetable.Models
         {
             Room = parameters[0];
             Number = parameters[1];
-            Teacher = parameters[2];
+            Teacher = parameters[2].Trim().Length > 0 ? parameters[2] : "-";
             Type = parameters[3];
             Name = parameters[4];
         }

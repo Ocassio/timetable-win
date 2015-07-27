@@ -70,20 +70,26 @@ namespace Timetable
         /// сеанса.  Это состояние будет равно NULL при первом посещении страницы.</param>
         private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            // TODO: Создание соответствующей модели данных для области проблемы, чтобы заменить пример данных
-            var sampleDataGroup = await SampleDataSource.GetGroupAsync("Group-4");
-            this.DefaultViewModel["Section3Items"] = sampleDataGroup;
+            DefaultViewModel["Groups"] = await DataProvider.GetGroups();
+            var selectedGroup = await CacheProvider.LoadGroup();
+            if (selectedGroup != null)
+            {
+                GroupList.SelectedItem = selectedGroup;
+            }
+            else
+            {
+                GroupList.SelectedIndex = 0;
+            }
 
-            
+            var group = ((Group) GroupList.SelectedItem).Id;
+
             var days = await CacheProvider.LoadTimetable();
             ColorsHelper.SetRandomColors(days);
-            this.DefaultViewModel["Days"] = days;
+            DefaultViewModel["Days"] = days;
 
-            days = await DataProvider.GetTimetableByGroup("557");
+            days = await DataProvider.GetTimetableByGroup(group);
             ColorsHelper.SetRandomColors(days);
-            this.DefaultViewModel["Days"] = days;
-
-            this.DefaultViewModel["Groups"] = await DataProvider.GetGroups();
+            DefaultViewModel["Days"] = days;
 
             ProgressBar.IsIndeterminate = false;
         }
@@ -116,6 +122,20 @@ namespace Timetable
             ProgressBar.IsIndeterminate = true;
 
             var days = await DataProvider.GetTimetableByGroup("557");
+            ColorsHelper.SetRandomColors(days);
+            DefaultViewModel["Days"] = days;
+
+            ProgressBar.IsIndeterminate = false;
+        }
+
+        private async void GroupList_OnSelectionChanged(object sender, SelectionChangedEventArgs selectionChangedEventArgs)
+        {
+            var selectedGroup = (Group) selectionChangedEventArgs.AddedItems[0];
+            CacheProvider.SaveGroup(selectedGroup);
+
+            ProgressBar.IsIndeterminate = true;
+
+            var days = await DataProvider.GetTimetableByGroup(selectedGroup.Id);
             ColorsHelper.SetRandomColors(days);
             DefaultViewModel["Days"] = days;
 
