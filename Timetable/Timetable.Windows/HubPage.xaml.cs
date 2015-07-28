@@ -31,30 +31,21 @@ namespace Timetable
     /// </summary>
     public sealed partial class HubPage : Page
     {
-        private NavigationHelper navigationHelper;
-        private ObservableDictionary defaultViewModel = new ObservableDictionary();
-
         /// <summary>
         /// Получает NavigationHelper, используемый для облегчения навигации и управления жизненным циклом процессов.
         /// </summary>
-        public NavigationHelper NavigationHelper
-        {
-            get { return this.navigationHelper; }
-        }
+        public NavigationHelper NavigationHelper { get; }
 
         /// <summary>
         /// Получает DefaultViewModel. Эту модель можно изменить на модель строго типизированных представлений.
         /// </summary>
-        public ObservableDictionary DefaultViewModel
-        {
-            get { return this.defaultViewModel; }
-        }
+        public ObservableDictionary DefaultViewModel { get; } = new ObservableDictionary();
 
         public HubPage()
         {
             this.InitializeComponent();
-            this.navigationHelper = new NavigationHelper(this);
-            this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
+            this.NavigationHelper = new NavigationHelper(this);
+            this.NavigationHelper.LoadState += this.NavigationHelper_LoadState;
         }
 
         /// <summary>
@@ -70,28 +61,13 @@ namespace Timetable
         /// сеанса.  Это состояние будет равно NULL при первом посещении страницы.</param>
         private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            DefaultViewModel["Groups"] = await DataProvider.GetGroups();
-            var selectedGroup = await CacheProvider.LoadGroup();
-            if (selectedGroup != null)
-            {
-                GroupList.SelectedItem = selectedGroup;
-            }
-            else
-            {
-                GroupList.SelectedIndex = 0;
-            }
-
-            var group = ((Group) GroupList.SelectedItem).Id;
+            await LoadGroups();
 
             var days = await CacheProvider.LoadTimetable();
             ColorsHelper.SetRandomColors(days);
             DefaultViewModel["Days"] = days;
 
-            days = await DataProvider.GetTimetableByGroup(group);
-            ColorsHelper.SetRandomColors(days);
-            DefaultViewModel["Days"] = days;
-
-            ProgressBar.IsIndeterminate = false;
+            await LoadTimetable();
         }
 
         #region Регистрация NavigationHelper
@@ -107,39 +83,52 @@ namespace Timetable
         /// </summary>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            this.navigationHelper.OnNavigatedTo(e);
+            NavigationHelper.OnNavigatedTo(e);
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
-            this.navigationHelper.OnNavigatedFrom(e);
+            NavigationHelper.OnNavigatedFrom(e);
         }
 
         #endregion
 
         private async void RefreshButton_OnClick(object sender, RoutedEventArgs e)
         {
-            ProgressBar.IsIndeterminate = true;
-
-            var days = await DataProvider.GetTimetableByGroup("557");
-            ColorsHelper.SetRandomColors(days);
-            DefaultViewModel["Days"] = days;
-
-            ProgressBar.IsIndeterminate = false;
+            await LoadTimetable();
         }
 
         private async void GroupList_OnSelectionChanged(object sender, SelectionChangedEventArgs selectionChangedEventArgs)
         {
             var selectedGroup = (Group) selectionChangedEventArgs.AddedItems[0];
             CacheProvider.SaveGroup(selectedGroup);
+            await LoadTimetable();
+        }
 
+        private async Task LoadTimetable()
+        {
             ProgressBar.IsIndeterminate = true;
 
-            var days = await DataProvider.GetTimetableByGroup(selectedGroup.Id);
+            var group = ((Group)GroupList.SelectedItem).Id;
+            var days = await DataProvider.GetTimetableByGroup(group);
             ColorsHelper.SetRandomColors(days);
             DefaultViewModel["Days"] = days;
 
             ProgressBar.IsIndeterminate = false;
+        }
+
+        private async Task LoadGroups()
+        {
+            DefaultViewModel["Groups"] = await DataProvider.GetGroups();
+            var selectedGroup = await CacheProvider.LoadGroup();
+            if (selectedGroup != null)
+            {
+                GroupList.SelectedItem = selectedGroup;
+            }
+            else
+            {
+                GroupList.SelectedIndex = 0;
+            }
         }
     }
 }
