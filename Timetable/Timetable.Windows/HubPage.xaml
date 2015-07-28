@@ -116,14 +116,38 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <TextBlock Text="Расписание"
                        Style="{StaticResource HeaderTextBlockStyle}"
                        Margin="45, 50"/>
 
+            <ComboBox Name="GroupList"
+                      Grid.Column="2"
+                      AllowDrop="True"
+                      FontSize="18"
+                      Margin="0, 0, 20, 0"
+                      Height="40"
+                      BorderThickness="0"
+                      ItemsSource="{Binding Groups}"
+                      SelectionChanged="GroupList_OnSelectionChanged" />
+            
+            <ComboBox Name="DateRangeList"
+                      Grid.Column="3"
+                      AllowDrop="True"
+                      FontSize="18"
+                      Margin="0, 0, 20, 0"
+                      Height="40"
+                      BorderThickness="0">
+                <ComboBoxItem Tag="sevenDays">7 дней</ComboBoxItem>
+                <ComboBoxItem Tag="currentWeek" IsSelected="True">Текущая неделя</ComboBoxItem>
+                <ComboBoxItem Tag="nextWeek">Следующая неделя</ComboBoxItem>
+                <ComboBoxItem Tag="currentMonth">Текущий месяц</ComboBoxItem>
+            </ComboBox>
+
             <Button Name="RefreshButton"
-                    Grid.Column="3"
+                    Grid.Column="4"
                     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
                     Margin="0, 0, 20, 0"
                     VerticalContentAlignment="Center"
@@ -137,18 +161,6 @@
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"/>
             </Button>
-            
-            <ComboBox Name="GroupList"
-                      Grid.Column="2"
-                      AllowDrop="True"
-                      FontSize="18"
-                      Margin="0, 0, 20, 0"
-                      Height="40"
-                      BorderThickness="0"
-                      ItemsSource="{Binding Groups}"
-                      SelectionChanged="GroupList_OnSelectionChanged">
-                
-            </ComboBox>
 
         </Grid>
     </Grid>

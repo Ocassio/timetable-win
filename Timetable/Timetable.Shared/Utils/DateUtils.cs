@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Timetable.Models;
 
 namespace Timetable.Utils
 {
@@ -41,6 +42,38 @@ namespace Timetable.Utils
         public static string GetDayOfTheWeek(DateTime date)
         {
             return date.ToString("dddd", CULTURE);
+        }
+
+        public static DateRange GetSevenDaysRange()
+        {
+            var from = DateTime.Today;
+            var to = from.AddDays(6);
+
+            return new DateRange(from, to);
+        }
+
+        public static DateRange GetCurrentWeekRange()
+        {
+            var from = DateTime.Today.AddDays(-1 * (int) DateTime.Today.DayOfWeek + 1);
+            var to = from.AddDays(6);
+
+            return new DateRange(from, to);
+        }
+
+        public static DateRange GetNextWeekRange()
+        {
+            var from = DateTime.Today.AddDays(-1 * (int) DateTime.Today.DayOfWeek + 8);
+            var to = from.AddDays(6);
+
+            return new DateRange(from, to);
+        }
+
+        public static DateRange GetCurrentMonthRange()
+        {
+            var from = DateTime.Today.AddDays(-1 * DateTime.Today.Day + 1);
+            var to = from.AddDays(DateTime.DaysInMonth(from.Year, from.Month) - 1);
+
+            return new DateRange(from, to);
         }
     }
 }
