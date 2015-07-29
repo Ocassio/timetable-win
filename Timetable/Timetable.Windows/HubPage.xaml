@@ -147,6 +147,7 @@
                 <ComboBoxItem Tag="currentWeek">Текущая неделя</ComboBoxItem>
                 <ComboBoxItem Tag="nextWeek">Следующая неделя</ComboBoxItem>
                 <ComboBoxItem Tag="currentMonth">Текущий месяц</ComboBoxItem>
+                <ComboBoxItem Tag="custom">Свой вариант</ComboBoxItem>
             </ComboBox>
 
             <Button Name="RefreshButton"
@@ -166,5 +167,18 @@
             </Button>
 
         </Grid>
+
+<!--        <Popup Grid.Row="0"-->
+<!--               IsOpen="True"-->
+<!--               VerticalAlignment="Center"-->
+<!--               HorizontalAlignment="Center">-->
+<!--            <StackPanel>-->
+<!--                <TextBlock>Hello!</TextBlock>-->
+<!--                <Button>Click Me!</Button>-->
+<!--            </StackPanel>-->
+<!--        </Popup>-->
+
     </Grid>
+    
+    
 </Page>

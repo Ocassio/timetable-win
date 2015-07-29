@@ -96,8 +96,6 @@ namespace Timetable
 
         private async void RefreshButton_OnClick(object sender, RoutedEventArgs e)
         {
-            MessageDialog dialog = new MessageDialog("Кажется, у Вас проблемы с доступом в Интернет. Проверьте Ваше подключение и попробуйте еще раз.", "Упс!");
-            await dialog.ShowAsync();
             await LoadTimetable();
         }
 
@@ -148,12 +146,17 @@ namespace Timetable
 
         private async void DateRangeList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (e.RemovedItems.Count > 0)
+            if (e.RemovedItems.Count == 0) return;
+
+            var dateRangeType = ((ComboBoxItem)e.AddedItems[0]).Tag.ToString();
+
+            SettingsProvider.DateRangeType = dateRangeType;
+            await LoadTimetable();
+
+            if (dateRangeType == "custom")
             {
-                SettingsProvider.DateRangeType = ((ComboBoxItem)e.AddedItems[0]).Tag.ToString();
-                await LoadTimetable();
+                
             }
-            
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Timetable.Models;
+using Timetable.Providers;
 
 namespace Timetable.Utils
 {
@@ -92,6 +93,11 @@ namespace Timetable.Utils
             var to = from.AddDays(DateTime.DaysInMonth(from.Year, from.Month) - 1);
 
             return new DateRange(from, to);
+        }
+
+        public static DateRange GetCustomDateRange()
+        {
+            return SettingsProvider.CustomDateRange;
         }
 
         public static DateRange GetDateRange(string key)
