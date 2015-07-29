@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using Timetable.Models;
 using System.Text;
 using Windows.UI;
+using Windows.UI.Popups;
 using Timetable.Utils;
 
 // Документацию по шаблону проекта "Универсальное приложение с Hub" см. по адресу http://go.microsoft.com/fwlink/?LinkID=391955
@@ -61,12 +62,12 @@ namespace Timetable
         /// сеанса.  Это состояние будет равно NULL при первом посещении страницы.</param>
         private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            await LoadGroups();
-
             var days = await CacheProvider.LoadTimetable();
             ColorsHelper.SetRandomColors(days);
             DefaultViewModel["Days"] = days;
 
+            LoadDateRange();
+            await LoadGroups();
             await LoadTimetable();
         }
 
@@ -95,6 +96,8 @@ namespace Timetable
 
         private async void RefreshButton_OnClick(object sender, RoutedEventArgs e)
         {
+            MessageDialog dialog = new MessageDialog("Кажется, у Вас проблемы с доступом в Интернет. Проверьте Ваше подключение и попробуйте еще раз.", "Упс!");
+            await dialog.ShowAsync();
             await LoadTimetable();
         }
 
@@ -109,7 +112,7 @@ namespace Timetable
         {
             ProgressBar.IsIndeterminate = true;
 
-            var group = ((Group)GroupList.SelectedItem).Id;
+            var group = ((Group) GroupList.SelectedItem).Id;
             var dateRange = ((ComboBoxItem) DateRangeList.SelectedItem).Tag.ToString();
 
             var dr = DateUtils.GetDateRange(dateRange);
@@ -117,6 +120,8 @@ namespace Timetable
             var days = await DataProvider.GetTimetableByGroup(group, dr);
             ColorsHelper.SetRandomColors(days);
             DefaultViewModel["Days"] = days;
+
+            CacheProvider.SaveTimetable(days);
 
             ProgressBar.IsIndeterminate = false;
         }
@@ -133,6 +138,22 @@ namespace Timetable
             {
                 GroupList.SelectedIndex = 0;
             }
+        }
+
+        private void LoadDateRange()
+        {
+            var dateRange = SettingsProvider.DateRangeType;
+            DateRangeList.SelectedItem = DateRangeList.Items.Single(o => ((ComboBoxItem) o).Tag.Equals(dateRange));
+        }
+
+        private async void DateRangeList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.RemovedItems.Count > 0)
+            {
+                SettingsProvider.DateRangeType = ((ComboBoxItem)e.AddedItems[0]).Tag.ToString();
+                await LoadTimetable();
+            }
+            
         }
     }
 }

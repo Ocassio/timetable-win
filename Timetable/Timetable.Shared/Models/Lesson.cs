@@ -1,19 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Media;
 
 namespace Timetable.Models
 {
+    [DataContract]
     public class Lesson
     {
+        [DataMember]
         public string Number { get; set; }
+
+        [DataMember]
         public string Room { get; set; }
+
+        [DataMember]
         public string Name { get; set; }
+
+        [DataMember]
         public string Teacher { get; set; }
+
+        [DataMember]
         public string Type { get; set; }
+
         public Brush Color { get; set; }
 
         public Lesson() { }

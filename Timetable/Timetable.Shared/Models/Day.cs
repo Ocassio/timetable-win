@@ -1,15 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using Timetable.Utils;
 
 namespace Timetable.Models
 {
+    [DataContract]
     public class Day
     {
+        [DataMember]
         private List<Lesson> lessons;
+
+        [DataMember]
         private string date;
 
         public string Date

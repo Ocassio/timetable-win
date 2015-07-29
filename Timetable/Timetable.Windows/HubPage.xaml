@@ -141,9 +141,10 @@
                       FontSize="18"
                       Margin="0, 0, 20, 0"
                       Height="40"
-                      BorderThickness="0">
+                      BorderThickness="0"
+                      SelectionChanged="DateRangeList_OnSelectionChanged">
                 <ComboBoxItem Tag="sevenDays">7 дней</ComboBoxItem>
-                <ComboBoxItem Tag="currentWeek" IsSelected="True">Текущая неделя</ComboBoxItem>
+                <ComboBoxItem Tag="currentWeek">Текущая неделя</ComboBoxItem>
                 <ComboBoxItem Tag="nextWeek">Следующая неделя</ComboBoxItem>
                 <ComboBoxItem Tag="currentMonth">Текущий месяц</ComboBoxItem>
             </ComboBox>

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace Timetable.Models
 {
+    [DataContract]
     public class DateRange
     {
         private DateTime from;
@@ -19,6 +21,7 @@ namespace Timetable.Models
             To = to;
         }
 
+        [DataMember]
         public DateTime From
         {
             get { return from; }
@@ -32,6 +35,7 @@ namespace Timetable.Models
             }
         }
 
+        [DataMember]
         public DateTime To
         {
             get { return to; }

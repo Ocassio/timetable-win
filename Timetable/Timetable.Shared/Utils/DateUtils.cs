@@ -57,6 +57,11 @@ namespace Timetable.Utils
             return date.ToString("dddd", CULTURE);
         }
 
+        public static DateRange GetDefaultDateRange()
+        {
+            return new DateRange(DateTime.Today, DateTime.Today);
+        }
+
         public static DateRange GetSevenDaysRange()
         {
             var from = DateTime.Today;
