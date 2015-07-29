@@ -110,7 +110,11 @@ namespace Timetable
             ProgressBar.IsIndeterminate = true;
 
             var group = ((Group)GroupList.SelectedItem).Id;
-            var days = await DataProvider.GetTimetableByGroup(group);
+            var dateRange = ((ComboBoxItem) DateRangeList.SelectedItem).Tag.ToString();
+
+            var dr = DateUtils.GetDateRange(dateRange);
+
+            var days = await DataProvider.GetTimetableByGroup(group, dr);
             ColorsHelper.SetRandomColors(days);
             DefaultViewModel["Days"] = days;
 

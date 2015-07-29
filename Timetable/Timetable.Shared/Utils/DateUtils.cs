@@ -13,6 +13,14 @@ namespace Timetable.Utils
         private const string DATE_FORMAT = "dd.MM.yyyy";
         private static readonly CultureInfo CULTURE = new CultureInfo("ru-RU");
 
+        private static readonly Dictionary<string, Func<DateRange>> DATE_RANGES_MAP = new Dictionary<string, Func<DateRange>> 
+        {
+            { "sevenDays", GetSevenDaysRange },
+            { "currentWeek", GetCurrentWeekRange },
+            { "nextWeek", GetNextWeekRange },
+            { "currentMonth", GetCurrentMonthRange }
+        };
+
         private DateUtils() { }
 
         public static DateTime ToDate(string value)
@@ -32,6 +40,11 @@ namespace Timetable.Utils
             }
 
             return true;
+        }
+
+        public static string ToString(DateTime value)
+        {
+            return value.ToString(DATE_FORMAT);
         }
 
         public static string GetDayOfTheWeek(string date)
@@ -74,6 +87,11 @@ namespace Timetable.Utils
             var to = from.AddDays(DateTime.DaysInMonth(from.Year, from.Month) - 1);
 
             return new DateRange(from, to);
+        }
+
+        public static DateRange GetDateRange(string key)
+        {
+            return DATE_RANGES_MAP[key]();
         }
     }
 }

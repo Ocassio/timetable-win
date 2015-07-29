@@ -72,12 +72,14 @@
         </DataTemplate>
         
         <DataTemplate x:Key="DayTemplate">
-            <StackPanel Orientation="Vertical">
-                <ItemsControl>
-                    <ItemsControl ItemsSource="{Binding Lessons}"
+            <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                <StackPanel Orientation="Vertical">
+                    <ItemsControl>
+                        <ItemsControl ItemsSource="{Binding Lessons}"
                                   ItemTemplate="{StaticResource LessonTemplate}"/>
-                </ItemsControl>
-            </StackPanel>
+                    </ItemsControl>
+                </StackPanel>
+            </ScrollViewer>
         </DataTemplate>
         
     </Page.Resources>

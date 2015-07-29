@@ -22,12 +22,12 @@ namespace Timetable.Providers
 
         public async static Task<ObservableCollection<Group>> GetGroups()
         {
-            ObservableCollection<Group> groups = new ObservableCollection<Group>();
+            var groups = new ObservableCollection<Group>();
 
-            HtmlDocument doc = await NetworkUtils.LoadDocument(TIMETABLE_URL);
-            HtmlNodeCollection groupNodes = doc.GetElementbyId("vr").ChildNodes;
+            var doc = await NetworkUtils.LoadDocument(TIMETABLE_URL);
+            var groupNodes = doc.GetElementbyId("vr").ChildNodes;
 
-            foreach (HtmlNode node in groupNodes.Where(node => node.Name == "option"))
+            foreach (var node in groupNodes.Where(node => node.Name == "option"))
             {
                 groups.Add(new Group(node.GetAttributeValue(ATTR_VALUE, ""), node.InnerText));
             }
@@ -35,25 +35,35 @@ namespace Timetable.Providers
             return groups;
         }
 
+        /// <summary>
+        /// Use only for debug purposes
+        /// </summary>
         public static async Task<ObservableCollection<Day>> GetTimetableByGroup(string group)
         {
-            Dictionary<string, string> parameters = new Dictionary<string, string>();
-            parameters.Add("rel", REL_GROUP);
-            parameters.Add("vr", group);
-            parameters.Add("from", "01.04.15"); //TODO change date
-            parameters.Add("to", "12.04.15"); //TODO change date
-            parameters.Add("submit_button", "ПОКАЗАТЬ");
+            return await GetTimetableByGroup(group, new DateRange(DateUtils.ToDate("01.04.2015"), DateUtils.ToDate("12.04.2015")));
+        }
 
-            HtmlDocument doc = await NetworkUtils.LoadDocument(TIMETABLE_URL, "POST", parameters);
-            HtmlNodeCollection tableNodes = doc.GetElementbyId("send").ChildNodes;
+        public static async Task<ObservableCollection<Day>> GetTimetableByGroup(string group, DateRange dateRange)
+        {
+            var parameters = new Dictionary<string, string>
+            {
+                { "rel", REL_GROUP },
+                { "vr", group },
+                { "from", DateUtils.ToString(dateRange.From) },
+                { "to", DateUtils.ToString(dateRange.To) },
+                { "submit_button", "ПОКАЗАТЬ" }
+            };
 
-            List<HtmlNode> nodes = new List<HtmlNode>();
+            var doc = await NetworkUtils.LoadDocument(TIMETABLE_URL, "POST", parameters);
+            var tableNodes = doc.GetElementbyId("send").ChildNodes;
 
-            foreach (HtmlNode node in tableNodes)
+            var nodes = new List<HtmlNode>();
+
+            foreach (var node in tableNodes)
             {
                 if (node.Name == "tr")
                 {
-                    foreach (HtmlNode childNode in node.ChildNodes)
+                    foreach (var childNode in node.ChildNodes)
                     {
                         if (childNode.Attributes["class"] != null && childNode.Attributes["class"].Value.Contains("hours"))
                         {
@@ -68,26 +78,26 @@ namespace Timetable.Providers
 
         private static ObservableCollection<Day> getDays(List<HtmlNode> nodes)
         {
-            ObservableCollection<Day> days = new ObservableCollection<Day>();
+            var days = new ObservableCollection<Day>();
 
             if (nodes.Count == 1)
             {
                 return days;
             }
 
-            int i = 0;
+            var i = 0;
             while (i < nodes.Count)
             {
-                string date = nodes[i].InnerText;
+                var date = nodes[i].InnerText;
                 if (DateUtils.IsDate(date))
                 {
-                    Day day = new Day(date);
+                    var day = new Day(date);
                     i++;
                     do
                     {
-                        List<string> parameters = new List<string>();
+                        var parameters = new List<string>();
 
-                        for (int j = 0; j < COL_COUNT; j++)
+                        for (var j = 0; j < COL_COUNT; j++)
                         {
                             parameters.Add(nodes[i].InnerText);
                             i++;
