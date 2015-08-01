@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using Timetable.Models;
 using System.Text;
 using Windows.UI;
+using Windows.UI.Core;
 using Windows.UI.Popups;
 using Timetable.Utils;
 
@@ -155,7 +156,14 @@ namespace Timetable
 
             if (dateRangeType == "custom")
             {
-                //TODO show date range selection dialog
+                var dlg = new DateRangePickerDialog();
+                var dateRange = await dlg.ShowAsync();
+                if (dateRange != null)
+                {
+                    //TODO process selected date range
+                    var dialog = new MessageDialog(DateUtils.ToString(dateRange.From) + " - " + DateUtils.ToString(dateRange.To), "Результат");
+                    await dialog.ShowAsync();
+                }
             }
         }
     }

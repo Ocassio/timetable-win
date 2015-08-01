@@ -151,9 +151,5 @@ namespace Timetable
 
         //    pageTitle.Text = builder.ToString();
         //}
-        public void Connect(int connectionId, object target)
-        {
-            
-        }
     }
 }
