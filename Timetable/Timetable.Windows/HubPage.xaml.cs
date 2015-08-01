@@ -102,7 +102,7 @@ namespace Timetable
         private async void GroupList_OnSelectionChanged(object sender, SelectionChangedEventArgs selectionChangedEventArgs)
         {
             var selectedGroup = (Group) selectionChangedEventArgs.AddedItems[0];
-            CacheProvider.SaveGroup(selectedGroup);
+            SettingsProvider.Group = selectedGroup;
             await LoadTimetable();
         }
 
@@ -115,11 +115,11 @@ namespace Timetable
 
             var dr = DateUtils.GetDateRange(dateRange);
 
-            var days = await DataProvider.GetTimetableByGroup(group, dr);
+            var days = await DataProvider.GetTimetableByGroup(group);
             ColorsHelper.SetRandomColors(days);
             DefaultViewModel["Days"] = days;
 
-            CacheProvider.SaveTimetable(days);
+            await CacheProvider.SaveTimetable(days);
 
             ProgressBar.IsIndeterminate = false;
         }
@@ -127,7 +127,7 @@ namespace Timetable
         private async Task LoadGroups()
         {
             DefaultViewModel["Groups"] = await DataProvider.GetGroups();
-            var selectedGroup = await CacheProvider.LoadGroup();
+            var selectedGroup = SettingsProvider.Group;
             if (selectedGroup != null)
             {
                 GroupList.SelectedItem = selectedGroup;
@@ -155,7 +155,7 @@ namespace Timetable
 
             if (dateRangeType == "custom")
             {
-                
+                //TODO show date range selection dialog
             }
         }
     }

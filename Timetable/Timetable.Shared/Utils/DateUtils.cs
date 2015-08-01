@@ -19,7 +19,8 @@ namespace Timetable.Utils
             { "sevenDays", GetSevenDaysRange },
             { "currentWeek", GetCurrentWeekRange },
             { "nextWeek", GetNextWeekRange },
-            { "currentMonth", GetCurrentMonthRange }
+            { "currentMonth", GetCurrentMonthRange },
+            { "custom", GetCustomDateRange }
         };
 
         private DateUtils() { }
