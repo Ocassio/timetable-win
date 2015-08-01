@@ -6,6 +6,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -15,32 +16,43 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Timetable.Models;
 
-// The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
-
 namespace Timetable
 {
     public sealed partial class DateRangePickerDialog : UserControl
     {
         private TaskCompletionSource<DateRange> taskCompletionSource;
 
-        public DateRangePickerDialog()
+        private readonly DateRange dateRange;
+
+        public DateRangePickerDialog(DateRange dateRange)
         {
             InitializeComponent();
+
+            Window.Current.SizeChanged += OnWindowResize;
+
+            this.dateRange = dateRange;
+            From.Date = dateRange.From;
+            To.Date = dateRange.To;
         }
 
         public Task<DateRange> ShowAsync()
         {
-            InitFields();
+            RecalculateSize();
             m_Popup.IsOpen = true;
             taskCompletionSource = new TaskCompletionSource<DateRange>();
             return taskCompletionSource.Task;
         }
 
-        public void InitFields()
+        private void RecalculateSize()
         {
             m_Rect1.Height = Window.Current.Bounds.Height;
             m_Rect1.Width = Window.Current.Bounds.Width;
             m_Rect2.Width = Window.Current.Bounds.Width;
+        }
+
+        private void OnWindowResize(object sender, WindowSizeChangedEventArgs windowSizeChangedEventArgs)
+        {
+            RecalculateSize();
         }
 
         private void OkClicked(object sender, RoutedEventArgs e)
@@ -54,6 +66,24 @@ namespace Timetable
         {
             taskCompletionSource.SetResult(null);
             m_Popup.IsOpen = false;
+        }
+
+        private void From_OnDateChanged(object sender, DatePickerValueChangedEventArgs e)
+        {
+            dateRange.From = From.Date.Date;
+            if (dateRange.To != To.Date.Date)
+            {
+                To.Date = dateRange.To;
+            }
+        }
+
+        private void To_OnDateChanged(object sender, DatePickerValueChangedEventArgs e)
+        {
+            dateRange.To = To.Date.Date;
+            if (dateRange.From != From.Date.Date)
+            {
+                From.Date = dateRange.From;
+            }
         }
     }
 }

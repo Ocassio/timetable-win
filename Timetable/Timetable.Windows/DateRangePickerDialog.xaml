@@ -6,18 +6,23 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    VerticalAlignment="Stretch"
+    HorizontalAlignment="Stretch"
     d:DesignHeight="300"
     d:DesignWidth="400">
 
-    <Popup x:Name="m_Popup" VerticalAlignment="Center" >
-        <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
+    <Popup x:Name="m_Popup"
+           VerticalAlignment="Stretch"
+           HorizontalAlignment="Stretch">
+        <Grid HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch">
             <Rectangle x:Name="m_Rect1" Fill="LightGray" 
-                           VerticalAlignment="Top" 
-                           HorizontalAlignment="Left"
+                           VerticalAlignment="Stretch" 
+                           HorizontalAlignment="Stretch"
                            Opacity="0.25"/>
             <Rectangle x:Name="m_Rect2" Fill="DarkBlue" 
                            VerticalAlignment="Center" 
-                           HorizontalAlignment="Left"
+                           HorizontalAlignment="Stretch"
                            Height="200"
                            />
             <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
@@ -30,7 +35,9 @@
                                Width="40">
                         От:
                     </TextBlock>
-                    <DatePicker x:Name="From" VerticalAlignment="Center"/>
+                    <DatePicker x:Name="From"
+                                VerticalAlignment="Center"
+                                DateChanged="From_OnDateChanged"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <TextBlock x:Name="ToLabel"
@@ -41,7 +48,9 @@
                                Width="40">
                         До:
                     </TextBlock>
-                    <DatePicker x:Name="To" />
+                    <DatePicker x:Name="To"
+                                VerticalAlignment="Center"
+                                DateChanged="To_OnDateChanged"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,20,0,0">
                     <Button Content="OK" Margin="0,0,20,0" Click="OkClicked"/>

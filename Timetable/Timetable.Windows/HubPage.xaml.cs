@@ -116,7 +116,7 @@ namespace Timetable
 
             var dr = DateUtils.GetDateRange(dateRange);
 
-            var days = await DataProvider.GetTimetableByGroup(group);
+            var days = await DataProvider.GetTimetableByGroup(group, dr);
             ColorsHelper.SetRandomColors(days);
             DefaultViewModel["Days"] = days;
 
@@ -143,28 +143,46 @@ namespace Timetable
         {
             var dateRange = SettingsProvider.DateRangeType;
             DateRangeList.SelectedItem = DateRangeList.Items.Single(o => ((ComboBoxItem) o).Tag.Equals(dateRange));
+            var selectedItem = (ComboBoxItem) DateRangeList.SelectedItem;
+            if (selectedItem != null && selectedItem.Tag.ToString() == "custom")
+            {
+                selectedItem.Content = SettingsProvider.CustomDateRange.ToString();
+            }
         }
 
         private async void DateRangeList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.RemovedItems.Count == 0) return;
 
-            var dateRangeType = ((ComboBoxItem)e.AddedItems[0]).Tag.ToString();
-
-            SettingsProvider.DateRangeType = dateRangeType;
-            await LoadTimetable();
+            var selectedItem = (ComboBoxItem) e.AddedItems[0];
+            var dateRangeType = selectedItem.Tag.ToString();
 
             if (dateRangeType == "custom")
             {
-                var dlg = new DateRangePickerDialog();
+                var dlg = new DateRangePickerDialog(SettingsProvider.CustomDateRange);
                 var dateRange = await dlg.ShowAsync();
                 if (dateRange != null)
                 {
-                    //TODO process selected date range
-                    var dialog = new MessageDialog(DateUtils.ToString(dateRange.From) + " - " + DateUtils.ToString(dateRange.To), "Результат");
-                    await dialog.ShowAsync();
+                    SettingsProvider.CustomDateRange = dateRange;
+                    ((ComboBoxItem) DateRangeList.SelectedItem).Content = dateRange.ToString();
+                }
+                else
+                {
+                    DateRangeList.SelectedItem = e.RemovedItems[0];
+                    return;
                 }
             }
+            else
+            {
+                var deselectedItem = (ComboBoxItem) e.RemovedItems[0];
+                if (deselectedItem != null && deselectedItem.Tag.ToString() == "custom")
+                {
+                    deselectedItem.Content = "Свой вариант";
+                }
+            }
+
+            SettingsProvider.DateRangeType = dateRangeType;
+            await LoadTimetable();
         }
     }
 }

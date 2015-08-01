@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Text;
+using Timetable.Utils;
 
 namespace Timetable.Models
 {
@@ -47,6 +48,11 @@ namespace Timetable.Models
                 }
                 to = value;
             }
+        }
+
+        public override string ToString()
+        {
+            return DateUtils.ToString(From) + " - " + DateUtils.ToString(To);
         }
     }
 }
