@@ -22,6 +22,7 @@ using System.Text;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Popups;
+using Windows.UI.ViewManagement;
 using Timetable.Utils;
 
 // Документацию по шаблону проекта "Универсальное приложение с Hub" см. по адресу http://go.microsoft.com/fwlink/?LinkID=391955
@@ -141,9 +142,14 @@ namespace Timetable
 
         private void LoadDateRange()
         {
-            var dateRange = SettingsProvider.DateRangeType;
-            DateRangeList.SelectedItem = DateRangeList.Items.Single(o => ((ComboBoxItem) o).Tag.Equals(dateRange));
-            var selectedItem = (ComboBoxItem) DateRangeList.SelectedItem;
+            var dateRangeType = SettingsProvider.DateRangeType;
+            LoadDateRange(dateRangeType);
+        }
+
+        private void LoadDateRange(string dateRangeType)
+        {
+            DateRangeList.SelectedItem = DateRangeList.Items.Single(o => ((ComboBoxItem)o).Tag.Equals(dateRangeType));
+            var selectedItem = (ComboBoxItem)DateRangeList.SelectedItem;
             if (selectedItem != null && selectedItem.Tag.ToString() == "custom")
             {
                 selectedItem.Content = SettingsProvider.CustomDateRange.ToString();
@@ -152,7 +158,7 @@ namespace Timetable
 
         private async void DateRangeList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (e.RemovedItems.Count == 0) return;
+            if (e.AddedItems.Count == 0 || e.RemovedItems.Count == 0 || e.AddedItems[0] == null || e.RemovedItems[0] == null) return;
 
             var selectedItem = (ComboBoxItem) e.AddedItems[0];
             var dateRangeType = selectedItem.Tag.ToString();
@@ -164,7 +170,9 @@ namespace Timetable
                 if (dateRange != null)
                 {
                     SettingsProvider.CustomDateRange = dateRange;
-                    ((ComboBoxItem) DateRangeList.SelectedItem).Content = dateRange.ToString();
+                    DateRangeList.SelectedIndex = -1;
+                    selectedItem.Content = dateRange.ToString();
+                    DateRangeList.SelectedItem = selectedItem;
                 }
                 else
                 {
