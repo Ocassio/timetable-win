@@ -133,6 +133,7 @@
                       Height="40"
                       BorderThickness="0"
                       ItemsSource="{Binding Groups}"
+                      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
                       SelectionChanged="GroupList_OnSelectionChanged" />
 
             <ComboBox Name="DateRangeList"

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -72,7 +74,6 @@ namespace Timetable
 
             LoadDateRange();
             await LoadGroups();
-            await LoadTimetable();
         }
 
         #region Регистрация NavigationHelper
@@ -112,33 +113,56 @@ namespace Timetable
 
         private async Task LoadTimetable()
         {
+            if (GroupList.SelectedItem == null) return;
+
             ProgressBar.IsIndeterminate = true;
 
-            var group = ((Group) GroupList.SelectedItem).Id;
-            var dateRange = ((ComboBoxItem) DateRangeList.SelectedItem).Tag.ToString();
+            try
+            {
+                var group = ((Group)GroupList.SelectedItem).Id;
+                var dateRange = ((ComboBoxItem)DateRangeList.SelectedItem).Tag.ToString();
 
-            var dr = DateUtils.GetDateRange(dateRange);
+                var dr = DateUtils.GetDateRange(dateRange);
 
-            var days = await DataProvider.GetTimetableByGroup(group, dr);
-            ColorsHelper.SetRandomColors(days);
-            DefaultViewModel["Days"] = days;
+                var days = await DataProvider.GetTimetableByGroup(group, dr);
+                ColorsHelper.SetRandomColors(days);
+                DefaultViewModel["Days"] = days;
 
-            await CacheProvider.SaveTimetable(days);
+                await CacheProvider.SaveTimetable(days);
+            }
+            catch (WebException)
+            {
+                await new MessageDialog(
+                    "Невозможно загрузить данные. Пожалуйста, проверьте Ваше подключение к Интернет и повторите попытку.",
+                    "Проблемы с соединением").ShowAsync();
+            }
 
             ProgressBar.IsIndeterminate = false;
         }
 
         private async Task LoadGroups()
         {
-            DefaultViewModel["Groups"] = await DataProvider.GetGroups();
             var selectedGroup = SettingsProvider.Group;
-            if (selectedGroup != null)
+            try
             {
-                GroupList.SelectedItem = selectedGroup;
+                DefaultViewModel["Groups"] = await DataProvider.GetGroups();
+                if (selectedGroup != null)
+                {
+                    GroupList.SelectedItem = selectedGroup;
+                }
+                else
+                {
+                    GroupList.SelectedIndex = 0;
+                }
             }
-            else
+            catch (HttpRequestException)
             {
-                GroupList.SelectedIndex = 0;
+                if (selectedGroup != null)
+                {
+                    DefaultViewModel["Groups"] = new ObservableCollection<Group> {selectedGroup};
+                    GroupList.SelectedIndex = 0;
+                }
+                GroupList.IsEnabled = false;
             }
         }
 
