@@ -25,33 +25,56 @@
                            HorizontalAlignment="Stretch"
                            Height="200"
                            />
+            
             <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
+                <Grid HorizontalAlignment="Center">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
                     <TextBlock x:Name="FromLabel"
                                Foreground="White"
                                FontSize="25"
                                VerticalAlignment="Center"
                                Margin="0, 0, 20, 0"
-                               Width="40">
+                               Width="40"
+                               Grid.Row="0"
+                               Grid.Column="0">
                         От:
                     </TextBlock>
+
                     <DatePicker x:Name="From"
                                 VerticalAlignment="Center"
-                                DateChanged="From_OnDateChanged"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                DateChanged="From_OnDateChanged"
+                                Grid.Row="0"
+                                Grid.Column="1" />
+
                     <TextBlock x:Name="ToLabel"
                                Foreground="White"
                                FontSize="25"
                                VerticalAlignment="Center"
-                               Margin="0, 0, 20, 0"
-                               Width="40">
+                               Margin="0, 20, 20, 0"
+                               Width="40"
+                               Grid.Row="1"
+                               Grid.Column="0">
                         До:
                     </TextBlock>
+
                     <DatePicker x:Name="To"
                                 VerticalAlignment="Center"
-                                DateChanged="To_OnDateChanged"/>
-                </StackPanel>
+                                DateChanged="To_OnDateChanged"
+                                Margin="0, 20, 0, 0"
+                                Grid.Row="1"
+                                Grid.Column="1"/>
+
+                </Grid>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,20,0,0">
                     <Button Content="OK" Margin="0,0,20,0" Click="OkClicked"/>
                     <Button Content="Отмена" Click="CancelClicked"/>

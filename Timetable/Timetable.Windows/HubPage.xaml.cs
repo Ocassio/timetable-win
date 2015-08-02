@@ -44,6 +44,8 @@ namespace Timetable
         /// </summary>
         public ObservableDictionary DefaultViewModel { get; } = new ObservableDictionary();
 
+        private ComboBoxItem selectedDateRange;
+
         public HubPage()
         {
             this.InitializeComponent();
@@ -143,11 +145,6 @@ namespace Timetable
         private void LoadDateRange()
         {
             var dateRangeType = SettingsProvider.DateRangeType;
-            LoadDateRange(dateRangeType);
-        }
-
-        private void LoadDateRange(string dateRangeType)
-        {
             DateRangeList.SelectedItem = DateRangeList.Items.Single(o => ((ComboBoxItem)o).Tag.Equals(dateRangeType));
             var selectedItem = (ComboBoxItem)DateRangeList.SelectedItem;
             if (selectedItem != null && selectedItem.Tag.ToString() == "custom")
@@ -170,7 +167,7 @@ namespace Timetable
                 if (dateRange != null)
                 {
                     SettingsProvider.CustomDateRange = dateRange;
-                    DateRangeList.SelectedIndex = -1;
+                    DateRangeList.SelectedIndex = -1; // it's a hack, used to refresh custom date range item content
                     selectedItem.Content = dateRange.ToString();
                     DateRangeList.SelectedItem = selectedItem;
                 }
