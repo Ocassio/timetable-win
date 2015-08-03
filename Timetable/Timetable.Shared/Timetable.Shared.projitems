@@ -16,17 +16,6 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\SampleDataSource.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Encodings\Win1251Encoding.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\DateRange.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Day.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Group.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Lesson.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Providers\CacheProvider.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Providers\DataProvider.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Providers\SettingsProvider.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utils\ColorsHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utils\DateUtils.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utils\NetworkUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\ItemsHub.cs" />
     <Content Include="$(MSBuildThisFileDirectory)DataModel\SampleData.json" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\LightGray.png" />
