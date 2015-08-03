@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Background;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -16,6 +18,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using Timetable.Common;
+using Timetable.TileUpdater;
 
 // Документацию по шаблону проекта "Универсальное приложение с Hub" см. по адресу http://go.microsoft.com/fwlink/?LinkID=391955
 
@@ -26,6 +29,9 @@ namespace Timetable
     /// </summary>
     public sealed partial class App : Application
     {
+        private const string TILE_UPDATE_TASK = "TileUpdateTask";
+        private const int TILE_UPDATE_TIMEOUT = 240;
+
 #if WINDOWS_PHONE_APP
         private TransitionCollection transitions;
 #endif
@@ -116,6 +122,8 @@ namespace Timetable
 
             // Обеспечение активности текущего окна
             Window.Current.Activate();
+
+            RegisterTileUpdateTask();
         }
 
 #if WINDOWS_PHONE_APP
@@ -142,6 +150,28 @@ namespace Timetable
             var deferral = e.SuspendingOperation.GetDeferral();
             await SuspensionManager.SaveAsync();
             deferral.Complete();
+        }
+
+        private async Task RegisterTileUpdateTask()
+        {
+            var backgroundAccessStatus = await BackgroundExecutionManager.RequestAccessAsync();
+            if (backgroundAccessStatus == BackgroundAccessStatus.AllowedMayUseActiveRealTimeConnectivity ||
+                backgroundAccessStatus == BackgroundAccessStatus.AllowedWithAlwaysOnRealTimeConnectivity)
+            {
+                if (BackgroundTaskRegistration.AllTasks.Any(task => task.Value.Name == TILE_UPDATE_TASK))
+                {
+                    return;
+                }
+
+                var builder = new BackgroundTaskBuilder
+                {
+                    Name = TILE_UPDATE_TASK,
+                    TaskEntryPoint = typeof (TileUpdateTask).FullName
+                };
+                builder.SetTrigger(new TimeTrigger(TILE_UPDATE_TIMEOUT, false));
+
+                builder.Register();
+            }
         }
     }
 }
