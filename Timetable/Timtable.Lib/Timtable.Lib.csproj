@@ -47,6 +47,7 @@
     <Compile Include="Providers\CacheProvider.cs" />
     <Compile Include="Providers\DataProvider.cs" />
     <Compile Include="Providers\SettingsProvider.cs" />
+    <Compile Include="Tiles\TileUpdater.cs" />
     <Compile Include="Utils\ColorsHelper.cs" />
     <Compile Include="Utils\DateUtils.cs" />
     <Compile Include="Utils\NetworkUtils.cs" />

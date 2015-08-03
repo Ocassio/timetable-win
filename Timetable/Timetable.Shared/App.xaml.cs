@@ -123,7 +123,7 @@ namespace Timetable
             // Обеспечение активности текущего окна
             Window.Current.Activate();
 
-            RegisterTileUpdateTask();
+            await RegisterTileUpdateTask();
         }
 
 #if WINDOWS_PHONE_APP
@@ -149,6 +149,7 @@ namespace Timetable
         {
             var deferral = e.SuspendingOperation.GetDeferral();
             await SuspensionManager.SaveAsync();
+            await Timtable.Lib.Tiles.TileUpdater.UpdateTile();
             deferral.Complete();
         }
 
