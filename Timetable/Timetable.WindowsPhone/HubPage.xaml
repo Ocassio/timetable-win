@@ -109,5 +109,17 @@
                      ItemTemplate="{StaticResource DayTemplate}"
                      ItemsSource="{Binding Days}">
         </lv:ItemsHub>
+        
+        
     </Grid>
+    
+    <Page.BottomAppBar>
+        <CommandBar ClosedDisplayMode="Minimal">
+            <AppBarButton Name="GroupButton"
+                          Icon="People" />
+            <AppBarButton Name="DateRangeButton"
+                          Icon="Calendar" />
+        </CommandBar>
+    </Page.BottomAppBar>
+    
 </Page>
