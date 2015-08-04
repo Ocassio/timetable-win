@@ -13,6 +13,8 @@ namespace Timtable.Lib.Tiles
 {
     public class TileUpdater
     {
+        private const int LESSON_LINES_COUNT = 4;
+
         public static async Task UpdateTile()
         {
             var updater = TileUpdateManager.CreateTileUpdaterForApplication();
@@ -27,7 +29,7 @@ namespace Timtable.Lib.Tiles
             var group = SettingsProvider.Group;
             if (group == null) return;
 
-            var dateRange = DateUtils.GetCustomDateRange();
+            var dateRange = DateUtils.GetCustomDateRange(); //TODO change to default
 
             try
             {
@@ -44,14 +46,18 @@ namespace Timtable.Lib.Tiles
                         var textLines = tileXml.GetElementsByTagName("text");
                         textLines[0].InnerText = "Сегодня";
 
+                        var lessonsRemains = lessons.Count - lessonNumber;
+                        var linesRemains = LESSON_LINES_COUNT - lineNumber;
+
                         if (lineNumber == 0)
                         {
                             lineNumber++;
                             textLines[lineNumber].InnerText = "...";
+                            linesRemains = LESSON_LINES_COUNT - lineNumber;
+                            lineNumber++;
                         }
 
-                        var lessonsRemains = lessons.Count - lessonNumber;
-                        var linesRemains = 4 - lineNumber;
+                        
                         while (lineNumber < Math.Min(linesRemains, lessonsRemains) + 1)
                         {
                             textLines[lineNumber].InnerText = lessons[lessonNumber].Number + ") " + lessons[lessonNumber].Name;
@@ -59,7 +65,7 @@ namespace Timtable.Lib.Tiles
                             lessonNumber++;
                         }
 
-                        if (lineNumber == 4)
+                        if (lineNumber == LESSON_LINES_COUNT && lessonNumber < lessons.Count)
                         {
                             if (lessonNumber == lessons.Count - 1)
                             {

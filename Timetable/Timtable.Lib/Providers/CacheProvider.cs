@@ -49,7 +49,7 @@ namespace Timetable.Providers
                         await reader.LoadAsync(length);
                         var timetable = JsonConvert.DeserializeObject<List<Day>>(reader.ReadString(length));
 
-                        return new ObservableCollection<Day>(timetable);
+                        return timetable != null ? new ObservableCollection<Day>(timetable) : new ObservableCollection<Day>();
                     }
                 }
             }
