@@ -29,7 +29,7 @@ namespace Timtable.Lib.Tiles
             var group = SettingsProvider.Group;
             if (group == null) return;
 
-            var dateRange = DateUtils.GetCustomDateRange(); //TODO change to default
+            var dateRange = DateUtils.GetDefaultDateRange();
 
             try
             {
