@@ -155,7 +155,7 @@ namespace Timetable
                     GroupList.SelectedIndex = 0;
                 }
             }
-            catch (HttpRequestException)
+            catch (WebException)
             {
                 if (selectedGroup != null)
                 {

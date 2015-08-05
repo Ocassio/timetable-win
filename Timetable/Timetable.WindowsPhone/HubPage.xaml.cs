@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -19,6 +21,7 @@ using System.Threading.Tasks;
 using Timetable.Models;
 using System.Text;
 using Windows.UI;
+using Windows.UI.Popups;
 using Timetable.Utils;
 
 // Документацию по шаблону проекта "Универсальное приложение с Hub" см. по адресу http://go.microsoft.com/fwlink/?LinkID=391955
@@ -69,15 +72,11 @@ namespace Timetable
         /// сеанса.  Это состояние будет равно NULL при первом посещении страницы.</param>
         private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            // TODO: Создание соответствующей модели данных для области проблемы, чтобы заменить пример данных
-            var sampleDataGroup = await SampleDataSource.GetGroupAsync("Group-4");
-            this.DefaultViewModel["Section3Items"] = sampleDataGroup;
-
-            var days = await DataProvider.GetTimetableByGroup("557");
+            var days = await CacheProvider.LoadTimetable();
             ColorsHelper.SetRandomColors(days);
-            this.DefaultViewModel["Days"] = days;
+            DefaultViewModel["Days"] = days;
 
-            ProgressRing.IsActive = false;
+            await LoadTimetable();
         }
 
         /// <summary>
@@ -128,28 +127,62 @@ namespace Timetable
 
         #endregion
 
-        //private async Task loadGroups()
-        //{
-        //    List<Group> groups = await DataProvider.GetGroups();
-        //    StringBuilder builder = new StringBuilder();
-        //    foreach (Group group in groups)
-        //    {
-        //        builder.Append(group.ToString());
-        //    }
+        private async Task LoadTimetable()
+        {
+            var group = await GetSelectedGroup();
+            if (group == null) return;
 
-        //    pageTitle.Text = builder.ToString();
-        //}
+            ProgressBar.IsIndeterminate = true;
 
-        //private async Task loadDays()
-        //{
-        //    List<Day> days = await DataProvider.GetTimetableByGroup("557");
-        //    StringBuilder builder = new StringBuilder();
-        //    foreach (Day day in days)
-        //    {
-        //        builder.Append(day.ToString());
-        //    }
+            try
+            {
+                var dr = DateUtils.GetDateRange(SettingsProvider.DateRangeType);
 
-        //    pageTitle.Text = builder.ToString();
-        //}
+                var days = await DataProvider.GetTimetableByGroup(group.Id, dr);
+//                var days = await DataProvider.GetTimetableByGroup("557", dr);
+                ColorsHelper.SetRandomColors(days);
+                DefaultViewModel["Days"] = days;
+
+                await CacheProvider.SaveTimetable(days);
+            }
+            catch (WebException)
+            {
+                await new MessageDialog(
+                    "Невозможно загрузить данные. Пожалуйста, проверьте Ваше подключение к Интернет и повторите попытку.",
+                    "Проблемы с соединением").ShowAsync();
+            }
+
+            ProgressBar.IsIndeterminate = false;
+        }
+
+        private async Task<Group> GetSelectedGroup()
+        {
+            var group = SettingsProvider.Group;
+            if (group == null)
+            {
+                try
+                {
+                    var groups = await DataProvider.GetGroups();
+                    if (groups.Count > 0)
+                    {
+                        group = groups[0];
+                    }
+                    SettingsProvider.Group = group;
+                }
+                catch (WebException)
+                {
+                    await new MessageDialog(
+                        "Невозможно загрузить данные. Пожалуйста, проверьте Ваше подключение к Интернет и повторите попытку.",
+                        "Проблемы с соединением").ShowAsync();
+                }
+            }
+
+            return group;
+        }
+
+        private async void RefreshButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            await LoadTimetable();
+        }
     }
 }

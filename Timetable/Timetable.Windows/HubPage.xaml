@@ -108,7 +108,6 @@
         
         <ProgressBar Name="ProgressBar"
                      Margin="0, -50, 0, 0"
-                     IsIndeterminate="True"
                      Grid.Row="1"
                      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"/>
 

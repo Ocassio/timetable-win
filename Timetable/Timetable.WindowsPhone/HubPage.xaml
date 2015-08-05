@@ -47,7 +47,6 @@
                         Width="5"
                         Grid.Column="1"/>
 
-
                 <StackPanel Margin="10, 0, 10, 10"
                             Grid.Row="0"
                             Grid.Column="2">
@@ -92,33 +91,43 @@
     Эта сетка выступает в роли корневой области страницы.
   -->
     <Grid >
+        
         <Grid.ChildrenTransitions>
             <TransitionCollection>
                 <EntranceThemeTransition/>
             </TransitionCollection>
         </Grid.ChildrenTransitions>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-        <ProgressRing Name="ProgressRing"
-                      IsActive="True"
-                      Width="90"
-                      Height="90"/>
+        <ProgressBar Name="ProgressBar"
+                     Margin="0, 0, 0, 0"
+                     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"/>
 
         <lv:ItemsHub Header="Расписание"
                      HeaderTemplate="{StaticResource HeaderTemplate}"
                      SectonHeaderTemplate="{StaticResource SectionHeaderTemplate}"
                      ItemTemplate="{StaticResource DayTemplate}"
-                     ItemsSource="{Binding Days}">
-        </lv:ItemsHub>
-        
-        
+                     ItemsSource="{Binding Days}"
+                     Grid.Row="1" />
+       
     </Grid>
     
     <Page.BottomAppBar>
         <CommandBar ClosedDisplayMode="Minimal">
             <AppBarButton Name="GroupButton"
-                          Icon="People" />
+                          Icon="People"
+                          Label="Группа"/>
             <AppBarButton Name="DateRangeButton"
-                          Icon="Calendar" />
+                          Icon="Calendar"
+                          Label="Дата"/>
+            <AppBarButton Name="RefreshButton"
+                          Icon="Refresh"
+                          Label="Обновить"
+                          Click="RefreshButton_OnClick"/>
         </CommandBar>
     </Page.BottomAppBar>
     
