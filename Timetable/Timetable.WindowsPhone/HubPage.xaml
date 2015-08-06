@@ -14,7 +14,7 @@
     <Page.Resources>
 
         <DataTemplate x:Key="HeaderTemplate">
-            <TextBlock Margin="0, 15, 0, 0" Text="{Binding}"/>
+            <TextBlock Text="{Binding}" Margin="0,20,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" TextWrapping="NoWrap" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}" />
         </DataTemplate>
 
         <DataTemplate x:Key="SectionHeaderTemplate">
@@ -120,10 +120,12 @@
         <CommandBar ClosedDisplayMode="Minimal">
             <AppBarButton Name="GroupButton"
                           Icon="People"
-                          Label="Группа"/>
+                          Label="Группа"
+                          Click="GroupButton_OnClick"/>
             <AppBarButton Name="DateRangeButton"
                           Icon="Calendar"
-                          Label="Дата"/>
+                          Label="Дата"
+                          Click="DateRangeButton_OnClick"/>
             <AppBarButton Name="RefreshButton"
                           Icon="Refresh"
                           Label="Обновить"

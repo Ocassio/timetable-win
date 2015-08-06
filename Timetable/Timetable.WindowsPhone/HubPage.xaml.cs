@@ -88,7 +88,7 @@ namespace Timetable
         {
             HubSection section = e.Section;
             var group = section.DataContext;
-            this.Frame.Navigate(typeof(SectionPage), ((SampleDataGroup)group).UniqueId);
+            this.Frame.Navigate(typeof(GroupPage), ((SampleDataGroup)group).UniqueId);
         }
 
         /// <summary>
@@ -183,6 +183,16 @@ namespace Timetable
         private async void RefreshButton_OnClick(object sender, RoutedEventArgs e)
         {
             await LoadTimetable();
+        }
+
+        private void GroupButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof (GroupPage));
+        }
+
+        private void DateRangeButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof (DateRangePage));
         }
     }
 }
