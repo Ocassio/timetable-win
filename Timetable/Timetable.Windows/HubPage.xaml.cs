@@ -1,30 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using System.Threading.Tasks;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using Timetable.Data;
 using Timetable.Common;
-using Timetable.Providers;
-using System.Threading.Tasks;
 using Timetable.Models;
-using System.Text;
-using Windows.UI;
-using Windows.UI.Core;
-using Windows.UI.Popups;
-using Windows.UI.ViewManagement;
+using Timetable.Providers;
 using Timetable.Utils;
 
 // Документацию по шаблону проекта "Универсальное приложение с Hub" см. по адресу http://go.microsoft.com/fwlink/?LinkID=391955
@@ -46,13 +31,11 @@ namespace Timetable
         /// </summary>
         public ObservableDictionary DefaultViewModel { get; } = new ObservableDictionary();
 
-        private ComboBoxItem selectedDateRange;
-
         public HubPage()
         {
-            this.InitializeComponent();
-            this.NavigationHelper = new NavigationHelper(this);
-            this.NavigationHelper.LoadState += this.NavigationHelper_LoadState;
+            InitializeComponent();
+            NavigationHelper = new NavigationHelper(this);
+            NavigationHelper.LoadState += this.NavigationHelper_LoadState;
         }
 
         /// <summary>

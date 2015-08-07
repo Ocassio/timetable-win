@@ -14,7 +14,6 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using Timetable.Data;
 using Timetable.Common;
 using Timetable.Providers;
 using System.Threading.Tasks;
@@ -79,31 +78,6 @@ namespace Timetable
             await LoadTimetable();
         }
 
-        /// <summary>
-        /// Вызывается при щелчке заголовка HubSection.
-        /// </summary>
-        /// <param name="sender">Главная страница, которая содержит элемент HubSection, заголовок которого щелкнул пользователь.</param>
-        /// <param name="e">Данные события, описывающие, каким образом был инициирован щелчок.</param>
-        void Hub_SectionHeaderClick(object sender, HubSectionHeaderClickEventArgs e)
-        {
-            HubSection section = e.Section;
-            var group = section.DataContext;
-            this.Frame.Navigate(typeof(GroupPage), ((SampleDataGroup)group).UniqueId);
-        }
-
-        /// <summary>
-        /// Вызывается при нажатии элемента внутри раздела.
-        /// </summary>
-        /// <param name="sender">Представление сетки или списка
-        /// в котором отображается нажатый элемент.</param>
-        /// <param name="e">Данные о событии, описывающие нажатый элемент.</param>
-        void ItemView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            // Переход к соответствующей странице назначения и настройка новой страницы
-            // путем передачи необходимой информации в виде параметра навигации
-            var itemId = ((SampleDataItem)e.ClickedItem).UniqueId;
-            this.Frame.Navigate(typeof(ItemPage), itemId);
-        }
         #region Регистрация NavigationHelper
 
         /// <summary>
@@ -139,7 +113,6 @@ namespace Timetable
                 var dr = DateUtils.GetDateRange(SettingsProvider.DateRangeType);
 
                 var days = await DataProvider.GetTimetableByGroup(group.Id, dr);
-//                var days = await DataProvider.GetTimetableByGroup("557", dr);
                 ColorsHelper.SetRandomColors(days);
                 DefaultViewModel["Days"] = days;
 
