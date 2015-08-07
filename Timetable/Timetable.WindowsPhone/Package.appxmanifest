@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest" xmlns:m3="http://schemas.microsoft.com/appx/2014/manifest" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest">
-  <Identity Name="1574e099-47a9-4687-a79f-f436c6924834" Publisher="CN=orlic" Version="1.0.0.0" />
-  <mp:PhoneIdentity PhoneProductId="1574e099-47a9-4687-a79f-f436c6924834" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
+  <Identity Name="5658AlexanderIonov.3176585CE3672" Publisher="CN=72B40532-435A-43A0-B0BF-BE4744F00E1E" Version="1.1.0.0" />
+  <mp:PhoneIdentity PhoneProductId="19c04ef0-6573-453f-a761-6626f070b71e" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
-    <DisplayName>Timetable.WindowsPhone</DisplayName>
-    <PublisherDisplayName>orlic</PublisherDisplayName>
+    <DisplayName>Расписание ПВГУС</DisplayName>
+    <PublisherDisplayName>Alexander Ionov</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Prerequisites>
@@ -20,7 +20,7 @@
         <m3:LockScreen Notification="badgeAndTileText" BadgeLogo="Assets\BadgeLogo.png" />
         <m3:DefaultTile Wide310x150Logo="Assets\WideLogo.png" Square71x71Logo="Assets\Square71x71Logo.png">
         </m3:DefaultTile>
-        <m3:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="#3f51b5" />
+        <m3:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="#3f1db3" />
       </m3:VisualElements>
       <Extensions>
         <Extension Category="windows.backgroundTasks" EntryPoint="Timetable.TileUpdater.TileUpdateTask">
