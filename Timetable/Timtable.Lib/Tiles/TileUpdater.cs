@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Data.Xml.Dom;
@@ -15,6 +16,8 @@ namespace Timtable.Lib.Tiles
     {
         private const int LESSON_LINES_COUNT = 4;
 
+        private const string TILE_IMAGE = "ms-appx:///Assets/WideTileLogo.scale-100.png";
+
         public static async Task UpdateTile()
         {
             var updater = TileUpdateManager.CreateTileUpdaterForApplication();
@@ -22,8 +25,8 @@ namespace Timtable.Lib.Tiles
             updater.Clear();
 
             var imageTileXml = TileUpdateManager.GetTemplateContent(TileTemplateType.TileWide310x150Image);
-            var image = (XmlElement)imageTileXml.GetElementsByTagName("image")[0];
-            image.SetAttribute("src", "ms-appx:///Assets/Wide310x150Logo.scale-100.png");
+            var image = (XmlElement) imageTileXml.GetElementsByTagName("image")[0];
+            image.SetAttribute("src", TILE_IMAGE);
             updater.Update(new TileNotification(imageTileXml));
 
             var group = SettingsProvider.Group;
