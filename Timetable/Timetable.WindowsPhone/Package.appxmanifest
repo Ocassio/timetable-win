@@ -19,8 +19,14 @@
       <m3:VisualElements DisplayName="Расписание ПВГУС" Square150x150Logo="Assets\Logo.png" Square44x44Logo="Assets\SmallLogo.png" Description="Приложение для просмотра расписания занятий Поволжского государственного университета сервиса" ForegroundText="light" BackgroundColor="transparent">
         <m3:LockScreen Notification="badgeAndTileText" BadgeLogo="Assets\BadgeLogo.png" />
         <m3:DefaultTile Wide310x150Logo="Assets\WideLogo.png" Square71x71Logo="Assets\Square71x71Logo.png">
+          <m3:ShowNameOnTiles>
+            <m3:ShowOn Tile="wide310x150Logo" />
+          </m3:ShowNameOnTiles>
         </m3:DefaultTile>
-        <m3:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="#3f1db3" />
+        <m3:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="#001aa6" />
+        <m3:InitialRotationPreference>
+          <m3:Rotation Preference="portrait" />
+        </m3:InitialRotationPreference>
       </m3:VisualElements>
       <Extensions>
         <Extension Category="windows.backgroundTasks" EntryPoint="Timetable.TileUpdater.TileUpdateTask">

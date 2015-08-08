@@ -31,11 +31,16 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
+        <ProgressBar Name="ProgressBar"
+                     Margin="0, 0, 0, 0"
+                     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"/>
+
         <!--Панель заголовка-->
-        <StackPanel Grid.Row="0" Margin="19,0,0,0">
+        <StackPanel Grid.Row="1" Margin="19,0,0,0">
             <TextBlock x:Uid="Header" Text="Расписание" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
             <TextBlock Text="Выбор группы" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" TextWrapping="NoWrap" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}" />
         </StackPanel>
@@ -43,7 +48,7 @@
         <ListBox
             Name="GroupList"
             TabIndex="1"
-            Grid.Row="1"
+            Grid.Row="2"
             ItemsSource="{Binding Groups}"
             Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
             SelectionChanged="GroupList_OnSelectionChanged">

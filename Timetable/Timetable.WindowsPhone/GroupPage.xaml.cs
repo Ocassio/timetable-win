@@ -82,6 +82,7 @@ namespace Timetable
 
         private async Task LoadGroups()
         {
+            ProgressBar.IsIndeterminate = true;
             var selectedGroup = SettingsProvider.Group;
             try
             {
@@ -108,6 +109,7 @@ namespace Timetable
                         "Невозможно загрузить данные. Пожалуйста, проверьте Ваше подключение к Интернет и повторите попытку.",
                         "Проблемы с соединением").ShowAsync();
             }
+            ProgressBar.IsIndeterminate = false;
         }
 
         private void GroupList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
